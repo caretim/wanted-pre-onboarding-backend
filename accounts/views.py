@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSignupSerializer
 from rest_framework.decorators import api_view
 
 from rest_framework import generics
@@ -9,9 +9,9 @@ from rest_framework import generics
 
 
 
-class UserSingup(generics.CreateAPIView):
+class UserSignup(generics.CreateAPIView):
     queryset = User.objects.all()
-    serializer_class =UserSerializer
+    serializer_class =UserSignupSerializer
 
 
 # @api_view
