@@ -6,10 +6,7 @@ from  django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    def create_user(self,email,password):
-        if not email:
-            raise ValueError("이메일을 입력해주세요")
-
+    def create_user(self,email):
         user = self.model(
             email=email,
         )
@@ -17,5 +14,5 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
+    email = models.CharField(max_length=30, unique=True, null=False, blank=False)
     USERNAME_FIELD = "email"

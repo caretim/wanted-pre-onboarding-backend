@@ -4,6 +4,6 @@ from . import views
 from rest_framework import urls
 
 urlpatterns =[
-    path('signup/', views.UserCreate.as_view()),
+    path('signup/', views.UserSingup.as_view()),
  ]
 
