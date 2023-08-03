@@ -1,9 +1,19 @@
 from django.db import models
+from  django.contrib.auth.models import AbstractBaseUser,BaseUserManager
 
-# Create your models here.
-from django.db import models
-from  django.contrib.auth.models import AbstractBaseUser
-# Create your models here.
+
+
+
+
+class UserManager(BaseUserManager):
+    def create_user(self,email,password):
+        if not email:
+            raise ValueError("이메일을 입력해주세요")
+
+        user = self.model(
+            email=email,
+        )
+        return user
 
 
 class User(AbstractBaseUser):
