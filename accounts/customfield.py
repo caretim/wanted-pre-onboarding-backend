@@ -26,7 +26,7 @@ class PasswordValidator:
         )
 
 class EmailValidator:
-    message = '@를 포함시켜주세요'
+    message = '유효한 이메일이 아닙니다 . @를 포함시켜주세요'
     code = 'invalid'
     password_regex = '^(?=.*[\d])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*()])[\w\d!@#$%^&*()]{8,}$'
     
@@ -62,7 +62,7 @@ class PasswordField(CharField):
 
 class CustomMailField(CharField):
     default_error_messages ={
-        'invalid': '이메일에 @이 포함되어 있지 않습니다.'
+        'invalid': '유효한 이메일이 아닙니다 . @를 포함시켜주세요.'
     }
 
     def __init__(self, **kwargs):
