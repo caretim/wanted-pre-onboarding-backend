@@ -1,9 +1,8 @@
 
-from django.contrib.auth import get_user_model
-from .serializers import UserSignupSerializer,UserLoginSerializer
+from django.contrib.auth import get_user_model,authenticate
+from .serializers import UserSignupSerializer,UserSerializer
 
 from rest_framework import status,generics
-from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
@@ -22,13 +21,22 @@ class UserSignup(generics.CreateAPIView):
     serializer_class =UserSignupSerializer
 
 
-class UserLogin(GenericAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class =UserLoginSerializer
+
+class UserLogin(APIView):
+    serializer_class =UserSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer
+        serializer =serializer(data=request.data)
+        a = serializer.is_valid(raise_exception=True)
+        user = authenticate(serializer.data)
+        return Response ({'user': user})
+
+
 
 #유저 로그인 , 첫 로그인시 토큰 발급.
 # class UserLogin(APIView):
-#     serializer_class =UserLoginSerializer
+#     serializer_class =UserSerializer
 #     def post(self,request):
 #         serializer = self.serializer_class(data=request.data)
 #         print(serializer)

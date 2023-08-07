@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model,authenticate
 from .customfield import CustomMailField ,PasswordField
+
 import bcrypt
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 User= get_user_model()
 
@@ -11,55 +13,48 @@ User= get_user_model()
 # 이메일에서 @ 외의 모든 유효성검사 제외
 # 패스워드에서 8자이상 제한 모든 유효성검사 제외 
 
+#암호 해싱 함수
+def bcypt_password(password):
+      hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+      change_password = hashed_password
+      return change_password
+
 
 #회원가입
-class UserSignupSerializer(serializers.Serializer):
+class UserSignupSerializer(serializers.ModelSerializer):
       email = CustomMailField(required =True)
       password = PasswordField(required =True)
       class Meta:
             model = User
             fields =["email","password"]
-            
 
       def create(self, validated_data):
-            password =validated_data['password']
-            # bcrypt를 통해 패스워드 해싱  
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt())
-            validated_data['password'] = hashed_password
-            user = User.objects.create(**validated_data)
+            password =bcypt_password(validated_data['password'])
+            user = (User(
+                  email =validated_data['email'],
+                  password =password))
+            user.save()
             return user
 
 
-#회원가입 필드와 meta 상속, post기능만
-class UserLoginSerializer(UserSignupSerializer):
+
+
+
+#로그인확인
+class UserSerializer(serializers.ModelSerializer):
       email = CustomMailField(required =True)
       password = PasswordField(required =True)
+      token = serializers.SerializerMethodField()
+
+      def get_token(self,obj):
+           #로그인 체크 후 토큰 발급하기(0807)
+           bcrypt.checkpw(obj['password'].encode('utf-8'), )
+           password = bcypt_password()
+           print(password)
+
       class Meta:
             model = User
-            fields =["email","password"] 
-
-      def post(self, validated_data):
-            password =validated_data['password']
-            # bcrypt를 통해 패스워드 해싱  
-            hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            validated_data['password'] = hashed_password
-            try:
-                user = User.objects.get(**validated_data)
-                return user
-            except:
-                  context={
-                        'message': '유효하지 않은 메세지입니다.'
-                  }
-                  return context
-            
-#로그인 
-class UserLoginSerializer(serializers.Serializer):
-        email = CustomMailField(required =True)
-        password = PasswordField(required =True,write_only=True)
-        class Meta:
-              model = User
-              fields =["email",'password']
-
+            fields = ("email", "password",'token')
 
             
 
