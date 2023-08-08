@@ -15,26 +15,26 @@ User= get_user_model()
 
 #암호 해싱 함수
 def bcypt_password(password):
-      hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-      change_password = hashed_password
-      return change_password
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    change_password = hashed_password
+    return change_password
 
 
 #회원가입
 class UserSignupSerializer(serializers.ModelSerializer):
-      email = CustomMailField(required =True)
-      password = PasswordField(required =True)
-      class Meta:
-            model = User
-            fields =["email","password"]
+    email = CustomMailField(required =True)
+    password = PasswordField(required =True)
+    class Meta:
+        model = User
+        fields =["email","password"]
 
-      def create(self, validated_data):
-            password =bcypt_password(validated_data['password'])
-            user = (User(
-                  email =validated_data['email'],
-                  password =password))
-            user.save()
-            return user
+    def create(self, validated_data):
+        password =bcypt_password(validated_data['password'])
+        user = (User(
+                email =validated_data['email'],
+                password =password))
+        user.save()
+        return user
 
 
 
@@ -42,19 +42,22 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
 #로그인확인
 class UserSerializer(serializers.ModelSerializer):
-      email = CustomMailField(required =True)
-      password = PasswordField(required =True)
-      token = serializers.SerializerMethodField()
+    email = CustomMailField(required =True)
+    password = PasswordField(required =True)
+    token = serializers.SerializerMethodField()
 
-      def get_token(self,obj):
-           #로그인 체크 후 토큰 발급하기(0807)
-           bcrypt.checkpw(obj['password'].encode('utf-8'), )
-           password = bcypt_password()
-           print(password)
+    def get_token(self,obj):
+        Return_Data = False
+        if User.objects.filter(email=obj['email']).exists():
+            user_password  =  User.objects.get(email=obj['email'])
+            if bcrypt.checkpw(user_password.encode('utf-8'),user_password.password):
+                Return_Data = True
+        print(Return_Data)
 
-      class Meta:
-            model = User
-            fields = ("email", "password",'token')
+
+    class Meta:
+        model = User
+        fields = ("email", "password",'token')
 
             
 
