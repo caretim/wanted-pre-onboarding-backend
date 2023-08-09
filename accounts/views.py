@@ -30,7 +30,7 @@ class UserLogin(APIView):
         serializer =serializer(data=request.data)
         a = serializer.is_valid(raise_exception=True)
         user = authenticate(serializer.data)
-        return Response ({'user': user})
+        return Response ({'user': a})
 
 
 

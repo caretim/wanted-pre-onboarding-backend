@@ -32,7 +32,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         password =bcypt_password(validated_data['password'])
         user = (User(
                 email =validated_data['email'],
-                password =password))
+                password =password.decode())) # DB저장 전 decode
         user.save()
         return user
 
@@ -44,21 +44,32 @@ class UserSignupSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     email = CustomMailField(required =True)
     password = PasswordField(required =True)
-    token = serializers.SerializerMethodField()
+    login = serializers.SerializerMethodField()
 
-    def get_token(self,obj):
-        Return_Data = False
+    def get_login(self,obj):
+        login = 0
+        context ='로그인 실패'
+
         if User.objects.filter(email=obj['email']).exists():
-            user_password  =  User.objects.get(email=obj['email'])
-            print(user_password.password)
+            user_password  =  User.objects.get(email=obj['email']).password
             if bcrypt.checkpw(obj['password'].encode('utf-8'),user_password.encode('utf-8')):
-                Return_Data = True
-        print(Return_Data)
+                login =1 # 로그인성공(2)
+                context = '로그인 성공'
+                
+            else:
+                login= 0 # 비밀번호 일치하지않음(3)
+                context = '비밀번호가 일치하지 않습니다.'
+        else:
+            login=0 # 아이디가 존재하지않음
+            context  = '아이디가 존재하지 않습니다.'
+        check = { 'login' : login,
+                 'context' :context }
+        return check
 
 
     class Meta:
         model = User
-        fields = ("email", "password",'token')
+        fields = ("email", "password",'login')
 
             
 
