@@ -50,7 +50,8 @@ class UserSerializer(serializers.ModelSerializer):
         Return_Data = False
         if User.objects.filter(email=obj['email']).exists():
             user_password  =  User.objects.get(email=obj['email'])
-            if bcrypt.checkpw(user_password.encode('utf-8'),user_password.password):
+            print(user_password.password)
+            if bcrypt.checkpw(obj['password'].encode('utf-8'),user_password.encode('utf-8')):
                 Return_Data = True
         print(Return_Data)
 
