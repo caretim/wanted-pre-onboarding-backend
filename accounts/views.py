@@ -6,7 +6,7 @@ from rest_framework import status,generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer,RefreshToken
 
 
 
@@ -16,9 +16,25 @@ User= get_user_model()
 
 #유저 회원가입
 
-class UserSignup(generics.CreateAPIView):
-    queryset = User.objects.all()
+class UserSignup(APIView):
     serializer_class =UserSignupSerializer
+    
+    def post(self,request, *args, **kwargs):
+        serializer = UserSignupSerializer
+        serializer =serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.data
+        print(data)
+        user =User.objects.get(email=data['email'])
+        token = TokenObtainPairSerializer.get_token(user)
+        refresh_token = str(token)
+        access_token  = str(token.access_token)
+        context = Response({
+                "user": user.email,
+                'password' : user.password,
+                "refresh_token": refresh_token,
+                "access_token" :access_token })
+        return context
 
 
 
@@ -30,10 +46,10 @@ class UserLogin(APIView):
         serializer =serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.data['login']
-        if data['login'] == 1:
+        if data['login'] == 1: # 로그인 성공
             user =User.objects.get(email=data['email'])
-            token = TokenObtainPairSerializer.get_token(user)
-
+            #토큰 재발행
+            token = RefreshToken.for_user(user)
             refresh_token = str(token)
             access_token  = str(token.access_token)
             context = Response(
@@ -49,7 +65,7 @@ class UserLogin(APIView):
             )
             context.set_cookie("access_token", access_token, httponly=True)
             context.set_cookie("refresh_token", refresh_token, httponly=True)
-        else:
+        else: # 로그인 실패
             context =(
             Response(
                 {'message' : data['context']}))

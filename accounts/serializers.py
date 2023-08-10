@@ -24,17 +24,21 @@ def bcypt_password(password):
 class UserSignupSerializer(serializers.ModelSerializer):
     email = CustomMailField(required =True)
     password = PasswordField(required =True)
-    class Meta:
-        model = User
-        fields =["email","password"]
+    create = serializers.SerializerMethodField()
 
-    def create(self, validated_data):
+
+    def get_create(self, validated_data):
         password =bcypt_password(validated_data['password'])
-        user = (User(
+        user = (User.objects.create(
                 email =validated_data['email'],
                 password =password.decode())) # DB저장 전 decode
         user.save()
+        print('저장됨')
         return user
+    
+    class Meta:
+        model = User
+        fields =["email","password",'create']
 
 
 
