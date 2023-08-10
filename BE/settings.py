@@ -112,19 +112,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 10,
-    "DATETIME_INPUT_FORMATS": ["%d-%m-%Y %H:%M:%S"],
-    # 'DEFAULT_PERMISSION_CLASSES': (
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ),
+    "PAGE_SIZE": 5,
+    "DATETIME_INPUT_FORMATS": ("%d-%m-%Y %H:%M:%S"),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
+    ),  
 }
 
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=3),  # access 토큰 만료 테스트를 하려면 2~3분으로 바꿀것
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),  # access 토큰 만료 테스트를 하려면 2~3분으로 바꿀것
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": True,

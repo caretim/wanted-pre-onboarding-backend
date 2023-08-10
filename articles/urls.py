@@ -12,8 +12,6 @@ router.register("", views.ArticleViewSet, basename="articles")
 
 urlpatterns = [
     path("", include(router.urls)),
-    # path("list/", views.ArticleViewSet.as_view({"post": 'create','get': "list"}))
-    # # path("list/", views.ArticleViewSet.as_view({"post": 'create','get': "list"})) 
-    # # path("list/", views.ArticleViewSet.as_view({"post": 'create','get': "list"}))  
+    path("list/", views.ArticleViewSet.as_view({"post": 'create','get': "list"})),
 
 ]
