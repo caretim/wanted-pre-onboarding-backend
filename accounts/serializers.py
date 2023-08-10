@@ -49,22 +49,31 @@ class UserSerializer(serializers.ModelSerializer):
     def get_login(self,obj):
         login = 0
         context ='로그인 실패'
-
         if User.objects.filter(email=obj['email']).exists():
-            user_password  =  User.objects.get(email=obj['email']).password
+            user =User.objects.get(email=obj['email'])
+            user_password  =  user.password
             if bcrypt.checkpw(obj['password'].encode('utf-8'),user_password.encode('utf-8')):
-                login =1 # 로그인성공(2)
+                login= 1 # 로그인성공
                 context = '로그인 성공'
+                data = {
+                'login' :login ,
+                'context' : context,
+                'email':user.email}
+
+                return data
+
                 
             else:
-                login= 0 # 비밀번호 일치하지않음(3)
+                login= 0 # 비밀번호 일치하지않음
                 context = '비밀번호가 일치하지 않습니다.'
+                data = { 'login' : login,
+                    'context' :context }
         else:
             login=0 # 아이디가 존재하지않음
             context  = '아이디가 존재하지 않습니다.'
-        check = { 'login' : login,
-                 'context' :context }
-        return check
+            data = { 'login' : login,
+                    'context' :context }
+        return data
 
 
     class Meta:
@@ -73,3 +82,23 @@ class UserSerializer(serializers.ModelSerializer):
 
             
 
+#유저 로그인 , 첫 로그인시 토큰 발급.
+# class UserLogin(APIView):
+#     serializer_class =UserSerializer
+#     def post(self,request):
+#         serializer = self.serializer_class(data=request.data)
+#         print(serializer)
+#         if serializer.is_valid(raise_exception=True):
+#             # token = TokenObtainPairSerializer.get_token(user)
+#             # refresh_token = str(token)
+#             # access_token = str(token.access_token)
+#             # context = { {
+#             #         "user": serializer.data,
+#             #         "message": "회원가입완료",
+#             #         "token": {
+#             #             "access": access_token,
+#             #             "refresh": refresh_token,
+#             #         },
+#             #     }, }
+#         # return Response(context, status=status.HTTP_200_OK)
+#             return {'aa'}
