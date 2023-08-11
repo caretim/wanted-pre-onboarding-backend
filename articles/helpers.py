@@ -7,7 +7,7 @@ from rest_framework import permissions
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        # 읽기 권한 요청이 들어오면 허용
+        #get,head,options이라면 조회가능
         if request.method in permissions.SAFE_METHODS:
             return True
 
@@ -24,3 +24,4 @@ class IsOwner(permissions.BasePermission):
             else:
                 raise PermissionDenied() #유저가 다르다면
         raise NotAuthenticated() # 유저 존재하지않는다면
+

@@ -4,7 +4,8 @@ from rest_framework import viewsets,generics
 from rest_framework.response import Response
 from .serializers import ArticleSerializer
 from rest_framework.permissions import AllowAny
-from .permission import IsOwner,IsOwnerOrReadOnly
+from .helpers import IsOwner,IsOwnerOrReadOnly
+
 # Create your views here.
 
 

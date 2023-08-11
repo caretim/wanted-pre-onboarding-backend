@@ -10,7 +10,6 @@ from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer,RefreshToken
 
 
-
 # Create your views here.
 
 User= get_user_model()
@@ -34,7 +33,8 @@ class UserSignup(APIView):
                 "user": user.email,
                 'password' : user.password,
                 "refresh_token": refresh_token,
-                "access_token" :access_token })
+                "access_token" :access_token }
+                ,status=status.HTTP_200_OK)
         return context
 
 
@@ -42,8 +42,6 @@ class UserSignup(APIView):
 class UserLogin(APIView):
     serializer_class =UserSerializer
     permission_classes = [AllowAny]
-    
-
     
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer
@@ -67,8 +65,6 @@ class UserLogin(APIView):
                 },
                 status=status.HTTP_200_OK
             )
-            context.set_cookie("access_token", access_token, httponly=True)
-            context.set_cookie("refresh_token", refresh_token, httponly=True)
         else: # 로그인 실패
             context =(
             Response(

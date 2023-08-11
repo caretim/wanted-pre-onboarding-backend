@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model,authenticate
-from .customfield import CustomMailField ,PasswordField
+from .helpers import CustomMailField ,PasswordField
+from rest_framework.exceptions import  ValidationError
 
 import bcrypt
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -28,12 +29,13 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
 
     def get_create(self, validated_data):
+        if User.objects.filter(email =validated_data['email']).exists():
+             raise ValidationError({'이미 존재하는 이메일입니다.'})
         password =bcypt_password(validated_data['password'])
         user = (User.objects.create(
                 email =validated_data['email'],
                 password =password.decode())) # DB저장 전 decode
         user.save()
-        print('저장됨')
         return user
     
     class Meta:
@@ -86,23 +88,3 @@ class UserSerializer(serializers.ModelSerializer):
 
             
 
-#유저 로그인 , 첫 로그인시 토큰 발급.
-# class UserLogin(APIView):
-#     serializer_class =UserSerializer
-#     def post(self,request):
-#         serializer = self.serializer_class(data=request.data)
-#         print(serializer)
-#         if serializer.is_valid(raise_exception=True):
-#             # token = TokenObtainPairSerializer.get_token(user)
-#             # refresh_token = str(token)
-#             # access_token = str(token.access_token)
-#             # context = { {
-#             #         "user": serializer.data,
-#             #         "message": "회원가입완료",
-#             #         "token": {
-#             #             "access": access_token,
-#             #             "refresh": refresh_token,
-#             #         },
-#             #     }, }
-#         # return Response(context, status=status.HTTP_200_OK)
-#             return {'aa'}
