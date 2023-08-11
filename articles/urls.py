@@ -4,13 +4,16 @@ from . import views
 
 
 
-app_name = "articles"
+
 
 router = routers.DefaultRouter()
-router.register("", views.ArticleViewSet, basename="articles")
+router.register("", views.ArticleViewSet)
 
 
 urlpatterns = [
-    path("", include(router.urls)),
-
+    path("",views.ArticleViewSet.as_view({"get": "list"}),name='list'),
+    path("create/",views.ArticleViewSet.as_view({"post": "create"}),name='create'),
+    path("detail/<int:pk>/",views.ArticleViewSet.as_view({"get": "retrieve"}),name='detail'),
+    path("update/<int:pk>/",views.ArticleViewSet.as_view({"put": "update"}),name='update'),
+    path("delete/<int:pk>/",views.ArticleViewSet.as_view({"delete": "destroy"}),name='delete'),
 ]
