@@ -65,10 +65,13 @@ class UserLogin(APIView):
                 },
                 status=status.HTTP_200_OK
             )
+            context.set_cookie("access_token", access_token, httponly=True)
+            context.set_cookie("refresh_token", refresh_token, httponly=True)
         else: # 로그인 실패
             context =(
             Response(
                 {'message' : data['context']}))
+
         return  context
 
 

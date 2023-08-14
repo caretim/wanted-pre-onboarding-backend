@@ -57,8 +57,8 @@ class UserSerializer(serializers.ModelSerializer):
         context ='로그인 실패'
         if User.objects.filter(email=obj['email']).exists():
             user =User.objects.get(email=obj['email'])
-            user_password  =  user.password
-            if bcrypt.checkpw(obj['password'].encode('utf-8'),user_password.encode('utf-8')):
+            user_password  = user.password
+            if bcrypt.checkpw(obj['password'].encode('utf-8'),user_password.encode()):
                 login= 1 # 로그인성공
                 context = '로그인 성공'
                 data = {

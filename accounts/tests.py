@@ -32,6 +32,7 @@ class UserSignupTest(APITestCase):
         response = self.client.post(url,user_data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
 #로그인
 class UserLoginTest(APITestCase):
         def setUp(self): # 유저 생성

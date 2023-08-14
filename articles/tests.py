@@ -3,6 +3,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase,APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.views import status
+
 from .models import Article
 
 User = get_user_model()
@@ -13,17 +14,11 @@ User = get_user_model()
 #  앱 단위로 확인
 # python manage.py test [앱이름]
 
-# def 
-# client = APIClient()
-# User.objects.create(email="test@test", password="password")
-# user = User.objects.get(email="test@test")
-# client.force_authenticate(user=user)
-#         print(user,'유저 확인')
 
-
+# 아티클 CRUD 테스트코드
 class ArticleCreateTest(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email='testuser')
+        self.user = User.objects.create_user(email='testuser',password ="12345678")
         self.user.save()
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)

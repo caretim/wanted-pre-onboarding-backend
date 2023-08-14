@@ -16,4 +16,5 @@ urlpatterns = [
     path("detail/<int:pk>/",views.ArticleViewSet.as_view({"get": "retrieve"}),name='detail'),
     path("update/<int:pk>/",views.ArticleViewSet.as_view({"put": "update"}),name='update'),
     path("delete/<int:pk>/",views.ArticleViewSet.as_view({"delete": "destroy"}),name='delete'),
+    path("create2/",views.create_article,name="create2")
 ]
