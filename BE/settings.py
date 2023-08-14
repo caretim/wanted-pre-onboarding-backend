@@ -43,7 +43,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     #rest_work (drf,jwt)
     "rest_framework",
-    "rest_framework_simplejwt",
+    'rest_framework_simplejwt',
     #app 
     "accounts",
     "articles",
@@ -123,22 +123,22 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
     "DATETIME_INPUT_FORMATS": ["%d-%m-%Y %H:%M:%S"],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-         'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
-        
-    ),
+       
 }
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
-    'UPDATE_LAST_LOGIN': False,
+    "ACCESS_TOKEN_LIFETIME": timedelta(weeks=521),  # 10 years
+    "REFRESH_TOKEN_LIFETIME": timedelta(weeks=521),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
 }
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

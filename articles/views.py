@@ -9,19 +9,24 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.views import status
 from rest_framework.decorators import api_view
 from rest_framework.authentication import authenticate
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 
+#test
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 #viewset사용 
 class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
     permission_classes = [IsOwnerOrReadOnly]  #읽기전용 커스텀 
-    authentication_classes = [JWTAuthentication]
     def perform_create(self, serializer):
         print(self.request)
         serializer.save(user = self.request.user)
-
 
 @api_view(["POST"])
 def create_article(request):
@@ -31,3 +36,4 @@ def create_article(request):
     serializer.save(user=request.user)   
     return Response(status=status.HTTP_201_CREATED)
    return Response(status=status.HTTP_400_BAD_REQUEST)
+
