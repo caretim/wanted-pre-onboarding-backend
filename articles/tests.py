@@ -54,14 +54,4 @@
 #         url = reverse('delete', kwargs={'pk': 1} )
 #         response = self.client.delete(url)
 #         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.models import User
-user = User.objects.first()
-refresh = RefreshToken.for_user(user)
-raw_token = str(refresh.access_token)
 
-jwt_a = JWTAuthentication()
-validated_token = jwt_a.get_validated_token(raw_token)
-repr(validated_token)
-print(validated_token["user_id"])
