@@ -13,6 +13,7 @@ services:
   # docker-compose 에서 컨테이너(service) 단위를 묶음
   web:
     # 앱 service 이름
+    image: caretim/wanted:wanted
     build:
       dockerfile: Dockerfile # 빌드할 Docker 파일 위치
 
