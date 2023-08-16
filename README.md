@@ -16,7 +16,7 @@ http://54.180.144.237:8000/
 
 
 ### 시스템 아키텍쳐 
-![파일구조](https://github.com/caretim/wanted-pre-onboarding-backend/assets/108650777/8fa01527-4e4a-4c5b-a73f-bf8e73fb462a)
+![파일구조](https://github.com/caretim/wanted-pre-onboarding-backend/assets/108650777/f530cd45-ad59-41a1-8d23-2a2b126e6398)
 
 
 ### 데모 영상
