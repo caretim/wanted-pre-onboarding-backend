@@ -24,4 +24,18 @@ services:
     ports:
       # docker 와 로컬에서 서로 입력 출력할 포트, 접근할 포트
       - "8000:8000"
-    environment: SECRET_KEY = {SECRET_KEY} DATABASE_NAME = {DATABASE_NAME} DATABASE_PASSWORD = {DATABASE_PASSWORD} DATABASE_HOST = {DATABASE_HOST}
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0.22
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_HOST: root
+      MYSQL_DATABASE: wanted
+      MYSQL_USER: root
+      MYSQL_PASSWORD: wanted
+      MYSQL_ROOT_PASSWORD: wanted

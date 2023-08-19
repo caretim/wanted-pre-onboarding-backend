@@ -18,8 +18,9 @@ User = get_user_model()
 class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     queryset = Article.objects.all()
-    permission_classes = [IsOwnerOrReadOnly]  #읽기전용 커스텀 
+    permission_classes = [IsOwnerOrReadOnly] 
     def perform_create(self, serializer):
         serializer.save(user = self.request.user)
+
 
 

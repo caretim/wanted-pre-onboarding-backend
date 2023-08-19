@@ -16,6 +16,7 @@ from datetime import timedelta
 import os 
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
@@ -108,6 +109,16 @@ DATABASES = {
     }
 }
 
+
+# DATABASES = {
+#     'default' : {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': "wanted",
+#         'USER': 'root',
+#         'PASSWORD':"wanted",
+#         'HOST': 'root',
+#         'PORT': '3306',
+#     }}
 
 
 
